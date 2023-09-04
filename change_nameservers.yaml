@@ -1,0 +1,19 @@
+# Ansible playbook for changing nameservers on ubuntu 22.04
+- hosts: "ubuntu"
+  become: yes # Run as root
+
+  vars_prompt:
+
+  - name: current_ip
+    prompt: What is the current nameserver IP?
+    private: false
+  - name: target_ip
+    prompt: What is the new nameserver IP?
+    private: false
+
+  tasks:
+    - name: Change nameservers
+      shell: |
+        sudo sed -i 's/{{ current_ip }}/{{ target_ip }}/g' /etc/netplan/00-installer-config.yaml
+        sudo netplan apply
+            
