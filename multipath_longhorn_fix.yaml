@@ -1,0 +1,12 @@
+# Ansible playbook to append blacklist to multipath.conf to fix Longhorn error:
+# https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+- hosts: ubuntu
+  become: yes # Run as root
+
+  tasks:
+    - name: Append blacklist to multipath.conf
+      shell: |
+        echo "blacklist {
+          devnode "^sd[a-z0-9]+"
+        }" >> /etc/multipath.conf
+        systemctl restart multipathd
