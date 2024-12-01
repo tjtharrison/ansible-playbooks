@@ -1,0 +1,9 @@
+# Ansible playbook to install nfs-common
+- hosts: ubuntu
+  become: yes # Run as root
+
+  tasks:
+    - name: Install nfs-common
+      apt:
+        name: nfs-common
+        state: present
