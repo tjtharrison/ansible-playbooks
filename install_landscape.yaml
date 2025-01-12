@@ -1,0 +1,13 @@
+# Ansible playbook to deploy landscape client
+---
+- hosts: hvm-sandbox
+  become: yes # Run as root
+
+  tasks:
+    - name: Install landscape client
+      apt:
+        name: landscape-client
+        state: present
+    - name: Register landscape client
+      command: sudo landscape-config --computer-title "{{ inventory_hostname }}" --account-name standalone  --url https://landscape.tjth.co/message-system --ping-url http://landscape.tjth.co/ping --silent
+      register: landscape_client

@@ -1,0 +1,19 @@
+# Ansible playbook to copy script to host
+---
+- hosts: ubuntu
+  become: yes # Run as root
+
+  tasks:
+    - name: Copy script to host
+      copy:
+        src: docs/update-prometheus-metrics.sh
+        dest: /opt/prom_metrics.sh
+        mode: 0755
+        owner: root
+        group: root
+    - name: Create crontab entry
+      cron:
+        name: "Update prometheus metrics" 
+        minute: "*/1"
+        job: "/opt/prom_metrics.sh"
+        state: present
